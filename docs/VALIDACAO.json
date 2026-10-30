@@ -1,0 +1,82 @@
+{
+  "version": "1.2.0-alpha.12",
+  "engine": "0.3.91",
+  "checks": 551,
+  "suites": {
+    "sandbox_battle_generation": 187,
+    "native_options": 18,
+    "journal_frlg": 105,
+    "journal_rse_with_explicit_kanto_fixture": 107,
+    "native_boot_pal_fade": 12,
+    "battle_layout_navigation": 229,
+    "scenery_all_five_games_separate_suite": 164,
+    "framing": 161,
+    "ultrawide": 17,
+    "responsive_lens_palette": 111,
+    "sprite_anchors": 24
+  },
+  "native_environment_sources": [
+    "Sandbox-0.3.91.lua",
+    "LegacyCompat-0.3.91.lua"
+  ],
+  "native_contract_fixtures": [
+    "BattleAPI-0.3.91.lua",
+    "OptionMenu-0.3.91.lua",
+    "Boot-0.3.91.lua",
+    "PalFade-0.3.91.lua",
+    "SummaryData-0.3.91.lua",
+    "ManagerState-0.3.91.lua",
+    "BattleBg-0.3.91.lua",
+    "EnvFrlg-0.3.91.lua",
+    "EnvRse-0.3.91.lua",
+    "EmeraldBattleConstants-0.3.91.lua",
+    "Display-0.3.91.lua"
+  ],
+  "host_and_game_data_simulated": true,
+  "preview": "production renderer with simulated data and host; not gameplay capture",
+  "upgrades_simulated": [
+    "alpha.2",
+    "alpha.3",
+    "alpha.4",
+    "alpha.5",
+    "alpha.6",
+    "alpha.7",
+    "alpha.8",
+    "alpha.9",
+    "alpha.10",
+    "alpha.11"
+  ],
+  "external_mods_individually_tested": false,
+  "Windows_tested": false,
+  "PowerShell_installer_executed": false,
+  "LuaJIT_tested": true,
+  "in_game_tested": false,
+  "LuaJIT_test_scope": "simulated host only; no LOVE/GPU/ROM",
+  "simulated_game_variants": [
+    "firered",
+    "leafgreen",
+    "ruby",
+    "sapphire",
+    "emerald"
+  ],
+  "preview_count": 33,
+  "prior_version_user_observation": {
+    "version": "1.2.0-alpha.9",
+    "game": "firered",
+    "evidence": "user screenshot: ally HP box overlaps enemy; requested sprite-relative HUD, pastel controls and smaller faster lens foliage",
+    "does_not_validate_current_version": true
+  },
+  "pending": [
+    "real-game alpha12 verification on all five games",
+    "Windows/LOVE graphics and installer execution",
+    "battle camera/zoom and lens shaders",
+    "final-resolution HD scenery compositor",
+    "double and special battle overlay",
+    "Hoenn/Sevii full HD menus/maps and external mod integrations",
+    "native HUD overlay pixel/fade/FX comparison",
+    "optional KRS front/3 Rattata source artwork audit"
+  ],
+  "checks_definition": "551 per FRLG / 553 per RSE, plus scenery 164, framing 161, ultrawide 17, responsive 111, anchors 24; 60 suite executions across Lua5.4/LuaJIT, all simulated",
+  "new_preview": "Journal 00-21 and Options regenerated with neutral theme; simulated host and data, not gameplay",
+  "sprite_bounds_readback_gpu_tested": false
+}
