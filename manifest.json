@@ -1,7 +1,7 @@
 {
   "id": "battle_menu_2d_jo5k",
   "name": "2D Battle Menu - Jo5-k",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "api": 3,
   "entry": "main.lua",
   "profile": "overhaul",
@@ -24,7 +24,7 @@
     "engine_internals"
   ],
   "affects_link": false,
-  "description": "Beta Final / pre-release 2. Gen3 2D battle menus, scenery, lighting and touch controls for G1R API 3.",
+  "description": "Beta Final / pre-release 3. Battle presentation, evolution and optional opponent IV/EV for G1R API 3.",
   "author": "Jo5-k / MFA; KRS resources by Faendra",
   "experimental": true,
   "github": "Jo5-K/2d-battle-menu-jo5-k"

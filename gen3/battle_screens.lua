@@ -154,6 +154,7 @@ return function(R)
   end
  end
  function S.run(m,kind,next,...)
+  if kind=='summary' or kind=='evolution' then return next(...)end
   if not S.allowed(m)or S.failed then return next(...)end
   S.rememberBackdrop()
   if S.depth>0 then

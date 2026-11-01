@@ -54,6 +54,7 @@ return function(R)
     {key='cave_lighting',label='Luz interna das cavernas',default=true,values={true,false},labels={'Ligada','Desligada'}},
     {key='dialogue_size',label='Tamanho das mensagens',default='medium',values={'small','medium','medium_large','large'},labels={'Pequeno','Médio','Médio maior','Grande'}},
     {key='foreground',label='Primeiro plano',values={.65,0,1},labels={'65%','Desligado','100%'}},
+    {key='opponent_iv_ev',label='IV e EV do adversário',default=false,values={true,false},labels={'Ligada','Desligada'}},
   }
   local lightingSettings={
     {key='lighting_profile',label='Perfil da luz',default='auto',values={'auto','predawn','dawn','morning','noon','dusk','night'},labels={'Automático por horário','Madrugada','Amanhecer','Manhã','Meio-dia','Entardecer','Noite'}},
@@ -644,6 +645,7 @@ return function(R)
         layout=Target.draw(snap,frame.w,frame.h,R.portrait and R.portrait.field(frame.w,frame.h),rec.error)
       else layout=View.draw(snap,sync(rec),options,frame.w,frame.h,rec.error)end
       B.layout=layout
+      if R.extras then R.extras.ivEv(layout,B.context(),frame.w,frame.h)end
       if R.postLight then for _,rect in ipairs(layout.rects or {}) do if (rect.alpha or 1)>.2 then R.postLight.hud(rect) end end;R.postLight.hud(layout.settings) end
       if B.settingsOpen then
         local rows={}

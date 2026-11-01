@@ -8,7 +8,7 @@ return function(mod)
   local function loadPart(path)
     return assert(load(assert(mod:read(path)),'@battle_menu_2d_jo5k/'..path))()
   end
-  local R={mod=mod,version='1.0.0-rc.2',engine=version,depth=0,patches={},warnings={}}
+  local R={mod=mod,version='1.0.0-rc.3',engine=version,depth=0,patches={},warnings={}}
   R.load=loadPart
   assert(mod.manifest==nil or mod.manifest.api==3,'This build requires the API 3 manifest')
   -- The bare sandbox omits package; Loader's legacy compat supplies only an
@@ -115,6 +115,7 @@ return function(mod)
     {key='gen3_settings_language',label='SETTINGS LANGUAGE / IDIOMA',type='choice',default='pt-BR',group='GEN 3 / BATTLE',choices={{'PT-BR','pt-BR'},{'English','en'},{'Français','fr'},{'Español','es'}}},
     {key='gen3_battle_drop',label='LOWER BATTLERS',type='choice',default=8,group='GEN 3 / BATTLE',choices={{'8 PX',8},{'12 PX',12},{'16 PX',16},{'20 PX',20},{'NATIVE',0}}},
     {key='gen3_battle_extend',label='EXTEND NATIVE BATTLE FIELD',type='toggle',default=true,group='GEN 3 / BATTLE',description='Continue native wallpaper under the former GBA command panel; disable if another scenery mod supplies that area.'},
+    {key='gen3_opponent_iv_ev',label='OPPONENT IV / EV',type='toggle',default=false,group='GEN 3 / BATTLE'},
     {key='gen3_caught',label='SHOW CAUGHT POKEMON',type='toggle',default=true,group='GEN 3 / BATTLE'},
     {key='gen3_remember_move',label='REMEMBER LAST MOVE',type='toggle',default=true,group='GEN 3 / BATTLE'},
     {key='gen3_sprite_source',label='GEN3 POKEMON SPRITES',type='choice',default='native',group='GEN 3 / GRAPHICS',choices={{'ORIGINAL / OTHER MODS','native'},{'KRS STATIC ART','krs'}},description='KRS uses individually cropped static frames, never full animation sheets. Missing species and special forms keep native art.'},
@@ -166,6 +167,14 @@ return function(mod)
   R.scenery=loadPart('gen3/scenery.lua')(R)
   R.art=loadPart('gen3/art.lua')(R)
   R.battle=loadPart('gen3/battle.lua')(R)
+  R.extras=loadPart('gen3/presentation_extras.lua')(R)
+  R.stopSummary=loadPart('gen3/summary_background.lua')(R.wrap,function(m)
+   local B=R.module('src.core.game3.battle.init');local E=R.module('src.ui.game3.evolution_scene')
+   return R.glass()and R.option('battle',true)and ((B and B.isActive and B.isActive())or(E and E.open and E._isBattle)or(R.battleScreens and R.battleScreens.origins[m]))
+  end,function()
+   local t=R.option('battle_menu_skin','crystal_glass')
+   return t=='crystal_glass'and {.86,.94,1}or t=='emerald_gba'and {.32,.42,.39}or {.21,.42,.35}
+  end)
   R.battleTouch=loadPart('gen3/battle_touch.lua')(R)
   local drawWrapped=setmetatable({},{__mode='k'})
   local function install(game)
@@ -178,7 +187,7 @@ return function(mod)
     if native and native.isActive and native.isActive()and not R.lighting.active then
       R.lighting.started();R.ambient.started()
     end
-    R.battleScreens=R.battleScreens or R.load('gen3/battle_screens.lua')(R);R.battleScreens.installLoaded();R.battleTouch.install(R.game);R.art.installLoaded();R.battle.installLoaded();R.scenery.installLoaded();R.framing.installLoaded()
+    R.battleScreens=R.battleScreens or R.load('gen3/battle_screens.lua')(R);R.battleScreens.installLoaded();R.battleTouch.install(R.game);R.art.installLoaded();R.battle.installLoaded();R.extras.install();R.scenery.installLoaded();R.framing.installLoaded()
     local Game=R.module('src.core.Game3')
     if Game and not drawWrapped[Game] and type(Game.draw)=='function' then
       drawWrapped[Game]=true
@@ -227,7 +236,7 @@ return function(mod)
     local out=next(game,viewport)
     install(game)
     if R.unloaded then return out end
-    local ok,err=pcall(function()R.battle.draw(game,viewport);R.battleTouch.draw(game,viewport.width,viewport.height)end)
+    local ok,err=pcall(function()R.battle.draw(game,viewport);R.extras.evolutionHud(viewport.width,viewport.height);R.battleTouch.draw(game,viewport.width,viewport.height)end)
     if not ok then R.battle.failed=true;R.warn('battle renderer disabled; native UI restored',err) end
     return out
   end,250)
@@ -239,7 +248,7 @@ return function(mod)
       local ok,err=pcall(R.subscriptions[i]);if not ok then R.warn('subscription cleanup',err)end
     end
     R.subscriptions={}
-    if R.battleScreens then R.battleScreens.shutdown()end;R.battleTouch.shutdown();R.postLight.shutdown();R.details.shutdown();R.ambient.shutdown();R.lighting.shutdown();R.shadows.shutdown();R.scenery.shutdown();R.portrait.shutdown();if R.battle.shutdown then R.battle.shutdown() end
+    R.stopSummary();R.extras.shutdown();if R.battleScreens then R.battleScreens.shutdown()end;R.battleTouch.shutdown();R.postLight.shutdown();R.details.shutdown();R.ambient.shutdown();R.lighting.shutdown();R.shadows.shutdown();R.scenery.shutdown();R.portrait.shutdown();if R.battle.shutdown then R.battle.shutdown() end
     for i=#R.patches,1,-1 do
       local p=R.patches[i]
       if p[1][p[2]]==p[4] then p[1][p[2]]=p[3] end
@@ -254,7 +263,7 @@ return function(mod)
     return (table.unpack or unpack)(out,2)
   end,250)
   if owner then owner.shutdown=unload end
-  mod.exports.gen3={version=R.version,engine=R.engine,api=3,stage='Beta Final / pre-release 2',shutdown=unload,
+  mod.exports.gen3={version=R.version,engine=R.engine,api=3,stage='Beta Final / pre-release 3',shutdown=unload,
     registerType=R.battle.registerType,registerSceneLayer=R.details.register,removeSceneLayer=R.details.remove,diagnostics=function() return {api=3,unloaded=R.unloaded==true,inherited=R.inherited,liveGame=R.game~=nil,liveOptions=R.game and R.game.mods and R.game.mods.modOptions~=nil,capabilities=R.capabilities,warnings=R.warnings,battleFallback=R.battle.failed==true,lighting={active=R.lighting.active,enabled=R.lighting.enabled(),profile=R.lighting.profile,hour=R.lighting.hour,failed=R.lighting.failed,postRays=R.postLight.enabled(),postRaysFailed=R.postLight.failed}} end}
   if mod.log and mod.log.info then
     mod.log:info('2D Battle Menu - Jo5-k %s initialized for %s; native sandbox require bridge active.',R.version,game)

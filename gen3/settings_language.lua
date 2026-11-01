@@ -2,6 +2,7 @@
 return function(R)
  local languages={
   ["en"]={
+   ["IV e EV do adversário"]="Opponent IV and EV",
    ["Tema dos menus da batalha"]="Battle menu theme",
    ['Grade Journal (2 × 2)']='Journal grid (2 × 2)',
    ['Escolha o alvo']='Choose a target',['Voltar']='Back',['Ajustes']='Settings',
@@ -131,6 +132,7 @@ return function(R)
    ["Interior"]="Interior",
   },
   ["fr"]={
+   ["IV e EV do adversário"]="IV et EV adverses",
    ["Tema dos menus da batalha"]="Thème des menus de combat",
    ['Grade Journal (2 × 2)']='Grille Journal (2 × 2)',
    ['Escolha o alvo']='Choisissez une cible',['Voltar']='Retour',['Ajustes']='Réglages',
@@ -260,6 +262,7 @@ return function(R)
    ["Interior"]="Intérieur",
   },
   ["es"]={
+   ["IV e EV do adversário"]="IV y EV del rival",
    ["Tema dos menus da batalha"]="Tema de los menús de combate",
    ['Grade Journal (2 × 2)']='Cuadrícula Journal (2 × 2)',
    ['Escolha o alvo']='Elige un objetivo',['Voltar']='Volver',['Ajustes']='Ajustes',
