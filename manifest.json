@@ -1,7 +1,7 @@
 {
   "id": "battle_menu_2d_jo5k",
   "name": "2D Battle Menu - Jo5-k",
-  "version": "1.0.0-rc.3",
+  "version": "1.0.0-rc.4",
   "api": 3,
   "entry": "main.lua",
   "profile": "overhaul",
@@ -24,7 +24,7 @@
     "engine_internals"
   ],
   "affects_link": false,
-  "description": "Beta Final / pre-release 3. Battle presentation, evolution and optional opponent IV/EV for G1R API 3.",
+  "description": "Compatibilidade de apresentação exclusiva com 2.5D Battle Menu; mods podem permanecer carregados juntos.",
   "author": "Jo5-k / MFA; KRS resources by Faendra",
   "experimental": true,
   "github": "Jo5-K/2d-battle-menu-jo5-k"

@@ -8,7 +8,7 @@ return function(mod)
   local function loadPart(path)
     return assert(load(assert(mod:read(path)),'@battle_menu_2d_jo5k/'..path))()
   end
-  local R={mod=mod,version='1.0.0-rc.3',engine=version,depth=0,patches={},warnings={}}
+  local R={mod=mod,version='1.0.0-rc.4',engine=version,depth=0,patches={},warnings={}}
   R.load=loadPart
   assert(mod.manifest==nil or mod.manifest.api==3,'This build requires the API 3 manifest')
   -- The bare sandbox omits package; Loader's legacy compat supplies only an
@@ -24,9 +24,10 @@ return function(mod)
   end
   function R.active()
     local id=require('src.core.GameVersion').get()
-    return not R.unloaded and ({firered=true,leafgreen=true,ruby=true,sapphire=true,emerald=true})[id]==true
+    return not R.unloaded and (not R.mode or R.mode.owns()) and ({firered=true,leafgreen=true,ruby=true,sapphire=true,emerald=true})[id]==true
   end
   function R.option(key,default)
+    if key=='presentation_mode'and R.mode then return R.mode.current()=='battle_menu_25d_jo5k'and '2.5d'or R.mode.current()=='battle_menu_2d_jo5k'and '2d'or 'native' end
     local value=mod.options:get('gen3_'..key)
     if value==nil then return default end
     return value
@@ -34,6 +35,7 @@ return function(mod)
   -- The public options handle still exposes define/get in v0.3.97.
   -- Use the same native writer as the mod manager, including persistence/events.
   function R.setOption(key,value)
+    if key=='presentation_mode'and R.mode then return R.mode.select(value)end
     local game=R.game
     local Manager=R.module('src.mods.ManagerState')
     if not game or not game.mods or not game.save or not game.save.options
@@ -122,7 +124,10 @@ return function(mod)
     {key='gen3_front_generation',label='KRS FRONT GENERATION',type='choice',default='5',group='GEN 3 / GRAPHICS',choices={{'GEN 1','1'},{'GEN 2','2'},{'GEN 3','3'},{'GEN 4','4'},{'GEN 5','5'}}},
     {key='gen3_back_generation',label='KRS BACK GENERATION',type='choice',default='5',group='GEN 3 / GRAPHICS',choices={{'GEN 1','1'},{'GEN 2','2'},{'GEN 3','3'},{'GEN 4','4'},{'GEN 5','5'}}},
   }
+  table.insert(preferenceSchema,1,{key='gen3_presentation_mode',label='BATTLE PRESENTATION / MODO DE BATALHA',type='choice',default='2d',choices={{'2D','2d'},{'2.5D','2.5d'},{'NATIVE','native'}}})
   mod.options:define(preferenceSchema)
+  R.mode=loadPart('gen3/presentation_mode.lua')(R)
+  R.on('mod.options_changed',function(e)if e and e.mod==mod.id and e.key=='gen3_presentation_mode'then R.mode.select(e.value)end end)
   -- Inherit only unset presentation preferences. Never write the original
   -- namespace, nor overwrite choices already made in this independent copy.
   function R.inheritPresentation()
@@ -248,7 +253,7 @@ return function(mod)
       local ok,err=pcall(R.subscriptions[i]);if not ok then R.warn('subscription cleanup',err)end
     end
     R.subscriptions={}
-    R.stopSummary();R.extras.shutdown();if R.battleScreens then R.battleScreens.shutdown()end;R.battleTouch.shutdown();R.postLight.shutdown();R.details.shutdown();R.ambient.shutdown();R.lighting.shutdown();R.shadows.shutdown();R.scenery.shutdown();R.portrait.shutdown();if R.battle.shutdown then R.battle.shutdown() end
+    R.mode.stop();R.stopSummary();R.extras.shutdown();if R.battleScreens then R.battleScreens.shutdown()end;R.battleTouch.shutdown();R.postLight.shutdown();R.details.shutdown();R.ambient.shutdown();R.lighting.shutdown();R.shadows.shutdown();R.scenery.shutdown();R.portrait.shutdown();if R.battle.shutdown then R.battle.shutdown() end
     for i=#R.patches,1,-1 do
       local p=R.patches[i]
       if p[1][p[2]]==p[4] then p[1][p[2]]=p[3] end
@@ -263,8 +268,8 @@ return function(mod)
     return (table.unpack or unpack)(out,2)
   end,250)
   if owner then owner.shutdown=unload end
-  mod.exports.gen3={version=R.version,engine=R.engine,api=3,stage='Beta Final / pre-release 3',shutdown=unload,
-    registerType=R.battle.registerType,registerSceneLayer=R.details.register,removeSceneLayer=R.details.remove,diagnostics=function() return {api=3,unloaded=R.unloaded==true,inherited=R.inherited,liveGame=R.game~=nil,liveOptions=R.game and R.game.mods and R.game.mods.modOptions~=nil,capabilities=R.capabilities,warnings=R.warnings,battleFallback=R.battle.failed==true,lighting={active=R.lighting.active,enabled=R.lighting.enabled(),profile=R.lighting.profile,hour=R.lighting.hour,failed=R.lighting.failed,postRays=R.postLight.enabled(),postRaysFailed=R.postLight.failed}} end}
+  mod.exports.gen3={version=R.version,engine=R.engine,api=3,stage='Compatibility / pre-release 4',shutdown=unload,
+    resetPresentation=function()R.battle.settingsOpen=false;R.battle.lightingSettingsOpen=false;R.battle.drawStamp=nil;R.battleTouch.shutdown();if R.parallax then R.parallax.reset()end;local pad=R.battleTouch.pad(R.game or mod.game);if pad and pad.reset then pad:reset()end end,setBattleMode=R.mode.select,battleMode=R.mode.current,registerType=R.battle.registerType,registerSceneLayer=R.details.register,removeSceneLayer=R.details.remove,diagnostics=function() return {api=3,unloaded=R.unloaded==true,inherited=R.inherited,liveGame=R.game~=nil,liveOptions=R.game and R.game.mods and R.game.mods.modOptions~=nil,capabilities=R.capabilities,warnings=R.warnings,battleFallback=R.battle.failed==true,lighting={active=R.lighting.active,enabled=R.lighting.enabled(),profile=R.lighting.profile,hour=R.lighting.hour,failed=R.lighting.failed,postRays=R.postLight.enabled(),postRaysFailed=R.postLight.failed}} end}
   if mod.log and mod.log.info then
     mod.log:info('2D Battle Menu - Jo5-k %s initialized for %s; native sandbox require bridge active.',R.version,game)
   end

@@ -1,4 +1,4 @@
-# 2D Battle Menu - Jo5-k — 1.0.0-rc.3
+# 2D Battle Menu - Jo5-k — 1.0.0-rc.4
 
 ## Português
 
@@ -22,7 +22,7 @@ Official 0.3.97 loader and simulated tests passed for the five games. No physica
 
 See LICENSE.md and THIRD_PARTY_NOTICES.md for inherited code and resources. / Consulte os arquivos de licença e créditos dos recursos herdados.
 
-## 1.0.0-rc.3
+## 1.0.0-rc.4
 
 ## Português
 - Evolução: fundo expandido para preencher a janela; Pokémon e conteúdo nativo mantêm escala uniforme.
@@ -45,3 +45,8 @@ See LICENSE.md and THIRD_PARTY_NOTICES.md for inherited code and resources. / Co
 **Validation / Validação:** official API 3 loader passed in five games; 805 doubles and 456 FRLG checks, new presentation tests, four-language checks and 111 responsive checks passed in simulation. No ROM/GPU or physical Android visual validation was performed. / Sem validação visual em ROM/GPU real ou Android físico.
 
 Import the ZIP and restart G1R. / Importe o ZIP e reinicie o G1R.
+
+
+## 1.0.0-rc.4 — 2D / 2.5D
+
+The 2D and 2.5D mods may now remain loaded together. SELECT → Ajustes → Modo de batalha chooses the sole battle presentation. [Details](docs/RC4-MODES.md). Legacy Floating Glass remains incompatible.

@@ -26,6 +26,7 @@ return function(R)
   local Target=R.load('gen3/target_menu.lua')(R,Skin,translate)
   local ChoiceView=R.load('gen3/battle_choice.lua')(R,Skin);B.choiceView=ChoiceView
   local settings={
+    {key='presentation_mode',label='Modo de batalha',values={'2d','2.5d','native'},labels={'2D','2.5D','Original'}},
     {key='battle_layout',label='Layout dos botões',values={'layers','list','commands','journal'},labels={'Cartas em camadas','Lista flutuante','Menu de comandos (Fight)','Grade Journal (2 × 2)'}},
     {key='portrait_layout',label='Layout vertical',default='framed',values={'framed','panorama'},labels={'Campo emoldurado','Campo ampliado'}},
     {key='battle_virtual_pad',label='Joystick virtual na batalha',default='auto',values={'auto',true,false},labels={'Automática','Ligada','Desligada'}},

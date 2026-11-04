@@ -2,6 +2,7 @@
 return function(R)
  local languages={
   ["en"]={
+   ["Modo de batalha"]="Battle presentation",
    ["IV e EV do adversário"]="Opponent IV and EV",
    ["Tema dos menus da batalha"]="Battle menu theme",
    ['Grade Journal (2 × 2)']='Journal grid (2 × 2)',
@@ -132,6 +133,7 @@ return function(R)
    ["Interior"]="Interior",
   },
   ["fr"]={
+   ["Modo de batalha"]="Présentation du combat",
    ["IV e EV do adversário"]="IV et EV adverses",
    ["Tema dos menus da batalha"]="Thème des menus de combat",
    ['Grade Journal (2 × 2)']='Grille Journal (2 × 2)',
@@ -262,6 +264,7 @@ return function(R)
    ["Interior"]="Intérieur",
   },
   ["es"]={
+   ["Modo de batalha"]="Presentación de batalla",
    ["IV e EV do adversário"]="IV y EV del rival",
    ["Tema dos menus da batalha"]="Tema de los menús de combate",
    ['Grade Journal (2 × 2)']='Cuadrícula Journal (2 × 2)',
